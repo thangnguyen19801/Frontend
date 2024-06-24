@@ -17,7 +17,6 @@ function LineChart02({
   width,
   height
 }) {
-
   const [chart, setChart] = useState(null)
   const canvas = useRef(null);
   const legend = useRef(null);
@@ -144,6 +143,7 @@ function LineChart02({
       ],
     });
     setChart(newChart);
+    console.log(chart)
     return () => newChart.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

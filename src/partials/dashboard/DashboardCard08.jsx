@@ -4,42 +4,22 @@ import LineChart from '../../charts/LineChart02';
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';
 
-function DashboardCard08() {
-
+function DashboardCard08({data, from, to}) {
+  if (!data || !data["data"]) {
+    return <div>Loading...</div>; // Replace with a loading indicator or message
+  }
+  console.log(from, to)
+  const convertedArray = data["labels"].map(datetime => {
+    const [day, month, year] = datetime.split('-');
+    return `${month}-${day}-${year}`;
+  });
   const chartData = {
-    labels: [
-      '12-01-2020',
-      '01-01-2021',
-      '02-01-2021',
-      '03-01-2021',
-      '04-01-2021',
-      '05-01-2021',
-      '06-01-2021',
-      '07-01-2021',
-      '08-01-2021',
-      '09-01-2021',
-      '10-01-2021',
-      '11-01-2021',
-      '12-01-2021',
-      '01-01-2022',
-      '02-01-2022',
-      '03-01-2022',
-      '04-01-2022',
-      '05-01-2022',
-      '06-01-2022',
-      '07-01-2022',
-      '08-01-2022',
-      '09-01-2022',
-      '10-01-2022',
-      '11-01-2022',
-      '12-01-2022',
-      '01-01-2023',
-    ],
+    labels: convertedArray,
     datasets: [
       // Indigo line
       {
-        label: 'Current',
-        data: [73, 64, 73, 69, 104, 104, 164, 164, 120, 120, 120, 148, 142, 104, 122, 110, 104, 152, 166, 233, 268, 252, 284, 284, 333, 323],
+        label: 'Accessories',
+        data: data["data"].accessories,
         borderColor: tailwindConfig().theme.colors.indigo[500],
         fill: false,
         borderWidth: 2,
@@ -54,8 +34,8 @@ function DashboardCard08() {
       },
       // Blue line
       {
-        label: 'Previous',
-        data: [184, 86, 42, 378, 42, 243, 38, 120, 0, 0, 42, 0, 84, 0, 276, 0, 124, 42, 124, 88, 88, 215, 156, 88, 124, 64],
+        label: 'Furniture',
+        data: data["data"].furniture,
         borderColor: tailwindConfig().theme.colors.blue[400],
         fill: false,
         borderWidth: 2,
@@ -70,8 +50,8 @@ function DashboardCard08() {
       },
       // emerald line
       {
-        label: 'Average',
-        data: [122, 170, 192, 86, 102, 124, 115, 115, 56, 104, 0, 72, 208, 186, 223, 188, 114, 162, 200, 150, 118, 118, 76, 122, 230, 268],
+        label: 'Sport',
+        data: data["data"].sport,
         borderColor: tailwindConfig().theme.colors.emerald[500],
         fill: false,
         borderWidth: 2,
@@ -84,6 +64,36 @@ function DashboardCard08() {
         pointHoverBorderWidth: 0,
         clip: 20,
       },
+      {
+        label: 'Appliances',
+        data: data["data"].appliances,
+        borderColor: tailwindConfig().theme.colors.emerald[500],
+        fill: false,
+        borderWidth: 2,
+        tension: 0,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointBackgroundColor: tailwindConfig().theme.colors.emerald[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.emerald[500],
+        pointBorderWidth: 0,
+        pointHoverBorderWidth: 0,
+        clip: 20,
+      },
+      {
+        label: 'Electronics',
+        data: data["data"].electronics,
+        borderColor: tailwindConfig().theme.colors.emerald[500],
+        fill: false,
+        borderWidth: 2,
+        tension: 0,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointBackgroundColor: tailwindConfig().theme.colors.emerald[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.emerald[500],
+        pointBorderWidth: 0,
+        pointHoverBorderWidth: 0,
+        clip: 20,
+      }
     ],
   };
 

@@ -22,17 +22,47 @@ import DashboardCard12 from '../partials/dashboard/DashboardCard12';
 import DashboardCard13 from '../partials/dashboard/DashboardCard13';
 import Banner from '../partials/Banner';
 
-function Dashboard() {
-  let { category } = useParams();
+function Overview() {
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
+  const [data, setData] = useState({});
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+
   useEffect(() => {
-      const storedUsername = localStorage.getItem('username');
-      const storedRole = localStorage.getItem('role');
-      setUsername(storedUsername);
-      setRole(storedRole);
+    const defaultFromDate = new Date();
+    defaultFromDate.setDate(defaultFromDate.getDate() - 6); // Set from date to 7 days ago
+
+    setFromDate(defaultFromDate.toISOString().split('T')[0]);
+
+    const defaultToDate = new Date();
+    setToDate(defaultToDate.toISOString().split('T')[0]);
   }, []);
+
+  useEffect(() => {
+    const fDate = new Date(fromDate);
+    const tdate = new Date(toDate);
+    const fYearMonthDay = fDate.toISOString().split('T')[0];
+    const tYearMonthDay = tdate.toISOString().split('T')[0];
+    const fetchData = async () => {
+      try {
+        console.log(`http://localhost:5000/get-overview?from=${fYearMonthDay}&to=${tYearMonthDay}`)
+        const response = await fetch(`http://localhost:5000/get-overview?from=${fYearMonthDay}&to=${tYearMonthDay}`);
+        if (response.status === 200) {
+          const jsonData = await response.json();
+          setData(jsonData); // Assuming your API returns an array of data
+        } else {
+          alert('Something went wrong. Try again');
+        }
+        console.log(data)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [fromDate, toDate]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -44,7 +74,7 @@ function Dashboard() {
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 
         {/*  Site header */}
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} username={category} role={role} />
+        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} username={username} role={role} />
 
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
@@ -58,9 +88,11 @@ function Dashboard() {
               {/* Right: Actions */}
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 {/* Filter button */}
-                <FilterButton />
-                {/* Datepicker built with flatpickr */}
-                <Datepicker />
+                <Datepicker
+                  align="right"
+                  onFromDateChange={date => setFromDate(date)}
+                  onToDateChange={date => setToDate(date)}
+                />
                 {/* Add view button */}
                 <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg className="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -74,31 +106,13 @@ function Dashboard() {
 
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6">
-
-              {/* Line chart (Acme Plus) */}
-              <DashboardCard01 />
-              {/* Line chart (Acme Advanced) */}
-              <DashboardCard02 />
-              {/* Line chart (Acme Professional) */}
-              <DashboardCard03 />
-              {/* Bar chart (Direct vs Indirect) */}
-              <DashboardCard04 />
               {/* Doughnut chart (Top Countries) */}
               <DashboardCard06 />
               {/* Table (Top Channels) */}
               <DashboardCard07 />
               {/* Line chart (Sales Over Time) */}
-              <DashboardCard08 />
+              <DashboardCard08 data={data}/>
               {/* Stacked bar chart (Sales VS Refunds) */}
-              <DashboardCard09 />
-              {/* Card (Customers) */}
-              <DashboardCard10 />
-              {/* Card (Reasons for Refunds) */}
-              <DashboardCard11 />
-              {/* Card (Recent Activity) */}
-              <DashboardCard12 />
-              {/* Card (Income/Expenses) */}
-              <DashboardCard13 />
               
             </div>
 
@@ -112,4 +126,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Overview;

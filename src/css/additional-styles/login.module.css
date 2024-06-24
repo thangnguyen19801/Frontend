@@ -1,0 +1,16 @@
+/* LoginPage.css */
+
+.login-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    text-align: center; /* Center text if needed */
+  }
+  
+  .login-page-content {
+    max-width: 400px; /* Adjust as needed */
+    width: 100%;
+  }
+  
