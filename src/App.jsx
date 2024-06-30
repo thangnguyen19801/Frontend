@@ -13,6 +13,8 @@ import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
 import Overview from './pages/Overview';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import VerifyOTP from './pages/VerifyOTP';
 import Signup from './pages/Signup';
 
 function App() {
@@ -37,6 +39,8 @@ function App() {
       <Routes>
         {initialRoute}
         <Route exact path="/log-in" element={<Login />} />
+        <Route exact path="/forgot-password" element={<ForgotPassword />} />
+        <Route exact path="/verify-otp" element={<VerifyOTP />} />
         <Route exact path="/sign-up" element={<Signup />} />
         <Route exact path="/ecommerce/:category" element={<Dashboard />} />
       </Routes>

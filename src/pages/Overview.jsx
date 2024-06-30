@@ -27,42 +27,50 @@ function Overview() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
-  const [data, setData] = useState({});
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
+  const [data, setData] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  
 
-  useEffect(() => {
-    const defaultFromDate = new Date();
-    defaultFromDate.setDate(defaultFromDate.getDate() - 6); // Set from date to 7 days ago
+  const handleDateChange = async (start, end) => {
+    setStartDate(start);
+    setEndDate(end);
+    console.log("change", start, end)
+  };
 
-    setFromDate(defaultFromDate.toISOString().split('T')[0]);
+  const fetchData = async (start, end) => {
+    if (start && end) {
+      const formattedStart = start.toISOString().split('T')[0];
+      const formattedEnd = end.toISOString().split('T')[0];
+      
+      const url = `http://localhost:5000/get-overview?from=${formattedStart}&to=${formattedEnd}`;
 
-    const defaultToDate = new Date();
-    setToDate(defaultToDate.toISOString().split('T')[0]);
-  }, []);
-
-  useEffect(() => {
-    const fDate = new Date(fromDate);
-    const tdate = new Date(toDate);
-    const fYearMonthDay = fDate.toISOString().split('T')[0];
-    const tYearMonthDay = tdate.toISOString().split('T')[0];
-    const fetchData = async () => {
       try {
-        console.log(`http://localhost:5000/get-overview?from=${fYearMonthDay}&to=${tYearMonthDay}`)
-        const response = await fetch(`http://localhost:5000/get-overview?from=${fYearMonthDay}&to=${tYearMonthDay}`);
-        if (response.status === 200) {
-          const jsonData = await response.json();
-          setData(jsonData); // Assuming your API returns an array of data
-        } else {
-          alert('Something went wrong. Try again');
-        }
-        console.log(data)
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const result = await response.json();
+        setData(result);
+        console.log('Data fetched successfully:', result);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
-    fetchData();
-  }, [fromDate, toDate]);
+    }
+  };
+
+  useEffect(() => {
+    setUsername(localStorage.getItem("username"))
+    setRole(localStorage.getItem("role"))
+  })
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const data = fetchData(startDate, endDate);
+    }
+  }, [endDate]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -90,8 +98,7 @@ function Overview() {
                 {/* Filter button */}
                 <Datepicker
                   align="right"
-                  onFromDateChange={date => setFromDate(date)}
-                  onToDateChange={date => setToDate(date)}
+                  onDateChange={handleDateChange}
                 />
                 {/* Add view button */}
                 <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white">
@@ -111,8 +118,8 @@ function Overview() {
               {/* Table (Top Channels) */}
               <DashboardCard07 />
               {/* Line chart (Sales Over Time) */}
-              <DashboardCard08 data={data}/>
-              {/* Stacked bar chart (Sales VS Refunds) */}
+              {/* <DashboardCard08 data={data}/>
+              Stacked bar chart (Sales VS Refunds) */}
               
             </div>
 

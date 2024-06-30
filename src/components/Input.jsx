@@ -27,6 +27,6 @@ export default function Input({
               className={fixedInputClass+customClass}
               placeholder={placeholder}
             />
-          </div>
+        </div>
     )
 }

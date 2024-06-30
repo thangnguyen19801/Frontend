@@ -21,6 +21,19 @@ const loginFields=[
     }
 ]
 
+const forgotPasswordFields=[
+    {
+        labelText:"Email address",
+        labelFor:"email-address",
+        id:"email-address",
+        name:"email",
+        type:"email",
+        autoComplete:"email",
+        isRequired:true,
+        placeholder:"Email address"   
+    },
+]
+
 const signupFields=[
     {
         labelText:"Username",
@@ -64,4 +77,4 @@ const signupFields=[
     }
 ]
 
-export {loginFields,signupFields}
+export {loginFields,signupFields, forgotPasswordFields}

@@ -7,12 +7,12 @@ import { tailwindConfig } from '../../utils/Utils';
 function DashboardCard06() {
 
   const chartData = {
-    labels: ['United States', 'Italy', 'Other'],
+    labels: ['Electronics', 'Appliances', 'Furniture', "Computers", "Apparel"],
     datasets: [
       {
-        label: 'Top Countries',
+        label: 'Top Classification',
         data: [
-          35, 30, 35,
+          33770, 10022, 5502, 5177, 4033
         ],
         backgroundColor: [
           tailwindConfig().theme.colors.indigo[500],
